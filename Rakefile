@@ -1,15 +1,52 @@
-require "rubygems"
+# encoding: utf-8
 
-spec = Gem::Specification.new do |s|
-  
-  s.name              = "subzero"
-  s.version           = "0.1.0"
-  s.summary           = "Totally awesome gem that extends Fixnum functionality"
-  s.description       = "Adds one magic method to Fixnum class. Guest what method is it?"
-  s.authors           = ["Gregory Eremin"]
-  s.email             = "chez@vim.me"
-  s.homepage          = "https://github.com/magnolia-fan/subzero"
+require 'rubygems'
+require 'bundler'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
+require 'rake'
 
-  s.require_paths     = ["lib"]
-  
+require 'jeweler'
+Jeweler::Tasks.new do |gem|
+  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  gem.name = "subzero"
+  gem.homepage = "http://github.com/magnolia-fan/subzero"
+  gem.license = "MIT"
+  gem.summary = %Q{Totally awesome gem that extends Fixnum functionality}
+  gem.description = %Q{Adds one magic method to the Numeric class. Guest what method is it?}
+  gem.email = "magnolia_fan@me.com"
+  gem.authors = ["Gregory Eremin"]
+  # dependencies defined in Gemfile
+end
+Jeweler::RubygemsDotOrgTasks.new
+
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = FileList['spec/**/*_spec.rb']
+end
+
+RSpec::Core::RakeTask.new(:rcov) do |spec|
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rcov = true
+end
+
+require 'cucumber/rake/task'
+Cucumber::Rake::Task.new(:features)
+
+task :default => :spec
+
+require 'rdoc/task'
+RDoc::Task.new do |rdoc|
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "subzero #{version}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
 end
